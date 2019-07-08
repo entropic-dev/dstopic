@@ -2,3 +2,4 @@
 
 pub mod parse_args;
 pub mod fetch;
+pub mod localization;
