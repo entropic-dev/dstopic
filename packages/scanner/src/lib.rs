@@ -1,4 +1,5 @@
 use resast::ref_tree::prelude::*;
+use resast::ref_tree::{ProgramPart, decl, expr};
 use ressa::Parser;
 use std::vec::Vec;
 
@@ -8,14 +9,14 @@ pub fn parse_js<'a>(js: &'a str) -> Vec<&'a str> {
     for part in p {
         if let Ok(the_part) = part {
             match the_part {
-                resast::ref_tree::ProgramPart::Decl(some_part) => {
+                ProgramPart::Decl(some_part) => {
                     pd = match_declaration(some_part, pd)
                 }
                 the_thing => println!("Not a program part: {:?}", the_thing),
             }
         }
     }
-    return pd;
+    pd
 }
 
 fn match_declaration<'a>(declaration: Decl<'a>, mut pd: Vec<&'a str>) -> Vec<&'a str> {
@@ -28,7 +29,7 @@ fn match_declaration<'a>(declaration: Decl<'a>, mut pd: Vec<&'a str>) -> Vec<&'a
 }
 
 fn match_variable<'a>(
-    variable_vec: Vec<resast::ref_tree::decl::VariableDecl<'a>>,
+    variable_vec: Vec<decl::VariableDecl<'a>>,
     mut pd: Vec<&'a str>,
 ) -> Vec<&'a str> {
     for v in variable_vec {
@@ -50,8 +51,8 @@ fn match_expr<'a>(
         if callee == "require" {
             if let Some(argument) = expression.arguments.get(0) {
                 println!("{:?}", argument);
-                if let resast::ref_tree::expr::Expr::Literal(literal) = argument {
-                    if let resast::ref_tree::expr::Literal::String(string_arg) = literal {
+                if let expr::Expr::Literal(literal) = argument {
+                    if let expr::Literal::String(string_arg) = literal {
                         let quotes: &[_] = &['\'', '\"'];
                         pd.push(string_arg.trim_matches(quotes));
                     }
