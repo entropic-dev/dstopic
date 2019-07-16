@@ -1,6 +1,5 @@
 use std::fs;
 use std::io;
-use std::sync::Arc;
 
 use fluent::{FluentBundle, FluentResource};
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
@@ -13,8 +12,8 @@ fn read_file(path: &str) -> Result<String, io::Error> {
     Ok(s)
 }
 
-pub fn get_resources(requested: &str) -> Result<Vec<Arc<FluentResource>>, io::Error> {
-    let mut resources: Vec<Arc<FluentResource>> = vec![];
+pub fn get_resources(requested: &str) -> Result<Vec<FluentResource>, io::Error> {
+    let mut resources: Vec<FluentResource> = vec![];
     let locales = get_app_locales(&[requested]).expect("Failed to retrieve available locales");
 
     for path in L10N_RESOURCES {
@@ -26,13 +25,13 @@ pub fn get_resources(requested: &str) -> Result<Vec<Arc<FluentResource>>, io::Er
         );
         let source = read_file(&full_path).expect("Failed to read file.");
         let resource = FluentResource::try_new(source).expect("Could not parse an FTL string.");
-        resources.push(Arc::new(resource));
+        resources.push(resource);
     }
 
     Ok(resources)
 }
 
-pub fn get_resource_bundle(requested: &str) -> Result<FluentBundle, io::Error> {
+pub fn get_resource_bundle(requested: &str) -> Result<FluentBundle<FluentResource>, io::Error> {
     let locales = get_app_locales(&[requested]).expect("Failed to retrieve available locales");
     let mut bundle = FluentBundle::new(&locales);
 

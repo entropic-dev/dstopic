@@ -289,7 +289,7 @@ version = "0.1.0"
 dependencies = [
  "cacache 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "clap 2.33.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "fluent 0.6.0 (git+https://github.com/zbraniecki/fluent-rs/?branch=res-rc)",
+ "fluent 0.6.0 (git+https://github.com/zbraniecki/fluent-rs/)",
  "fluent-locale 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "reqwest 0.9.18 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -365,15 +365,15 @@ dependencies = [
 [[package]]
 name = "fluent"
 version = "0.6.0"
-source = "git+https://github.com/zbraniecki/fluent-rs/?branch=res-rc#605ec0e50b130f993d044af1354c75fd83222492"
+source = "git+https://github.com/zbraniecki/fluent-rs/#d37df07b6ede8d5fe7188222db7d0104c41561ba"
 dependencies = [
- "fluent-bundle 0.6.0 (git+https://github.com/zbraniecki/fluent-rs/?branch=res-rc)",
+ "fluent-bundle 0.6.0 (git+https://github.com/zbraniecki/fluent-rs/)",
 ]
 
 [[package]]
 name = "fluent-bundle"
 version = "0.6.0"
-source = "git+https://github.com/zbraniecki/fluent-rs/?branch=res-rc#605ec0e50b130f993d044af1354c75fd83222492"
+source = "git+https://github.com/zbraniecki/fluent-rs/#d37df07b6ede8d5fe7188222db7d0104c41561ba"
 dependencies = [
  "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "failure_derive 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -381,6 +381,7 @@ dependencies = [
  "fluent-syntax 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "intl_pluralrules 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "rental 0.5.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "smallvec 0.6.10 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1762,8 +1763,8 @@ dependencies = [
 "checksum failure_derive 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)" = "ea1063915fd7ef4309e222a5a07cf9c319fb9c7836b1f89b85458672dbb127e1"
 "checksum fake-simd 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "e88a8acf291dafb59c2d96e8f59828f3838bb1a70398823ade51a84de6a6deed"
 "checksum flate2 1.0.9 (registry+https://github.com/rust-lang/crates.io-index)" = "550934ad4808d5d39365e5d61727309bf18b3b02c6c56b729cb92e7dd84bc3d8"
-"checksum fluent 0.6.0 (git+https://github.com/zbraniecki/fluent-rs/?branch=res-rc)" = "<none>"
-"checksum fluent-bundle 0.6.0 (git+https://github.com/zbraniecki/fluent-rs/?branch=res-rc)" = "<none>"
+"checksum fluent 0.6.0 (git+https://github.com/zbraniecki/fluent-rs/)" = "<none>"
+"checksum fluent-bundle 0.6.0 (git+https://github.com/zbraniecki/fluent-rs/)" = "<none>"
 "checksum fluent-locale 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)" = "4a54a80f8d4153a0390516480b155b8495408f00a4eebd386ed4d7b4532c7e01"
 "checksum fluent-locale 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)" = "c86c49a9d48a46a59fa52fee755eb614646e5fa86f928ea0d0c6ed8505247bff"
 "checksum fluent-syntax 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)" = "cd33f0ec4141fae9f6d6183c30504275b8a4c843b02517d17098593244ad4617"

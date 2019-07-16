@@ -9,7 +9,7 @@ edition = "2018"
 [dependencies]
 clap = "2.33.0"
 cacache = "1.0.1"
-fluent = { git = "https://github.com/zbraniecki/fluent-rs/", branch = "res-rc" }
+fluent = { git = "https://github.com/zbraniecki/fluent-rs/" }
 fluent-locale = "0.5.0"
 ssri = "3.0.0"
 reqwest = "0.9.18"
