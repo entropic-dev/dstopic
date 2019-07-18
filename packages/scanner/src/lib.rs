@@ -12,15 +12,6 @@ pub fn parse_js<'a>(js: &'a str) -> Vec<&'a str> {
                 ProgramPart::Decl(some_part) => {
                     pd = match_declaration(some_part, pd)
                 },
-
-                // Dynamic imports
-                ProgramPart::Stmt(some_part) => {
-                    if let Stmt::Expr(expr) = some_part {
-                        if let Expr::Call(call) = expr {
-                            pd = match_expr(call, pd)
-                        }
-                    }
-                },
                 the_thing => println!("Not a program part: {:?}", the_thing),
             }
         }
@@ -105,11 +96,6 @@ mod tests {
     #[test]
     fn top_level_import_named() {
         let js = "import { map } from \"lodash\";";
-        assert_eq!(&"lodash", parse_js(js).get(0).unwrap())
-    }
-    #[test]
-    fn dynamic_import() {
-        let js = "import('lodash');";
         assert_eq!(&"lodash", parse_js(js).get(0).unwrap())
     }
 }
