@@ -3,8 +3,8 @@ use resast::ref_tree::{ProgramPart, decl, expr};
 use ressa::Parser;
 use std::vec::Vec;
 
-pub fn parse_js<'a>(js: &'a str) -> Vec<&'a str> {
-    let p = Parser::new(js).unwrap();
+pub fn parse_js<'a>(js: &'a str) -> Result<Vec<&'a str>, ressa::Error> {
+    let p = Parser::new(js)?;
     let mut pd = Vec::<&str>::new();
     for part in p {
         if let Ok(the_part) = part {
@@ -23,7 +23,7 @@ pub fn parse_js<'a>(js: &'a str) -> Vec<&'a str> {
             }
         }
     }
-    pd
+    Ok(pd)
 }
 
 fn match_declaration<'a>(declaration: Decl<'a>, mut pd: Vec<&'a str>) -> Vec<&'a str> {
@@ -81,31 +81,31 @@ mod tests {
     #[test]
     fn top_level_require_single_quotes() {
         let js = "const _ = require('lodash');";
-        assert_eq!(&"lodash", parse_js(js).get(0).unwrap())
+        assert_eq!(&"lodash", parse_js(js).unwrap().get(0).unwrap())
     }
     #[test]
     fn top_level_require_double_quotes() {
         let js = "const _ = require(\"lodash\");";
-        assert_eq!(&"lodash", parse_js(js).get(0).unwrap())
+        assert_eq!(&"lodash", parse_js(js).unwrap().get(0).unwrap())
     }
     #[test]
     fn top_level_require_statement() {
         let js = "require(\"lodash\");";
-        assert_eq!(&"lodash", parse_js(js).get(0).unwrap())
+        assert_eq!(&"lodash", parse_js(js).unwrap().get(0).unwrap())
     }
     #[test]
     fn top_level_default_import() {
         let js = "import _ from 'lodash';";
-        assert_eq!(&"lodash", parse_js(js).get(0).unwrap())
+        assert_eq!(&"lodash", parse_js(js).unwrap().get(0).unwrap())
     }
     #[test]
     fn top_level_import_alias() {
         let js = "import * as lodash from \"lodash\";";
-        assert_eq!(&"lodash", parse_js(js).get(0).unwrap())
+        assert_eq!(&"lodash", parse_js(js).unwrap().get(0).unwrap())
     }
     #[test]
     fn top_level_import_named() {
         let js = "import { map } from \"lodash\";";
-        assert_eq!(&"lodash", parse_js(js).get(0).unwrap())
+        assert_eq!(&"lodash", parse_js(js).unwrap().get(0).unwrap())
     }
 }
