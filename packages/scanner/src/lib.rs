@@ -60,8 +60,8 @@ fn match_variable<'a>(
 }
 
 fn match_expr<'a>(expression: expr::CallExpr<'a>, mut pd: Vec<&'a str>,) -> Vec<&'a str> {
-    if let Expr::Ident(callee) = *expression.callee {
-        if callee == "require" {
+    if let Expr::Ident(callee) = &*expression.callee {
+        if callee == &"require" {
             if let Some(argument) = expression.arguments.get(0) {
                 if let expr::Expr::Literal(literal) = argument {
                     if let expr::Literal::String(string_arg) = literal {
