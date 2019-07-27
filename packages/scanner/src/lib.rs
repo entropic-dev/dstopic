@@ -109,4 +109,32 @@ mod tests {
         let js = "import { map } from \"lodash\";";
         assert_eq!(&"lodash", parse_js(js).unwrap().get(0).unwrap())
     }
+    #[test]
+    fn no_valid_calls() {
+        let js = "const five = 5;";
+        assert_eq!(None, parse_js(js).unwrap().get(0));
+    }
+    #[test]
+    fn multi_line_one_valid_call() {
+        let js = &[
+            "const five = 5;",
+            "const moment = require('moment');",
+            "start('now');",
+        ]
+        .join(&"\n");
+        assert_eq!(&"moment", parse_js(js).unwrap().get(0).unwrap());
+    }
+    #[test]
+    fn multi_line_two_valid_calls() {
+        let js = &[
+            "const five = 5;",
+            "const moment = require('moment');",
+            "import _ from 'lodash';",
+            "start();",
+        ]
+        .join(&"\n");
+        let packages = parse_js(js).unwrap();
+        assert_eq!(&"moment", packages.get(0).unwrap());
+        assert_eq!(&"lodash", packages.get(1).unwrap());
+    }
 }
