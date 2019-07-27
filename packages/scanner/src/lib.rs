@@ -1,24 +1,16 @@
 use resast::ref_tree::prelude::*;
-use resast::ref_tree::{ProgramPart, decl, expr};
+use resast::ref_tree::{decl, expr, ProgramPart};
 use ressa::Parser;
 use std::vec::Vec;
 
 pub fn parse_js<'a>(js: &'a str) -> Result<Vec<&'a str>, ressa::Error> {
     let p = Parser::new(js)?;
     let mut pd = Vec::<&str>::new();
-    for part in p {
-        if let Ok(the_part) = part {
-            match the_part {
-                ProgramPart::Decl(some_part) => {
-                    pd = match_declaration(some_part, pd)
-                },
-                ProgramPart::Stmt(some_part) => {
-                    if let Stmt::Expr(expr) = some_part {
-                        if let Expr::Call(call) = expr {
-                            pd = match_expr(call, pd)
-                        }
-                    }
-                },
+    for part_result in p {
+        if let Ok(part) = part_result {
+            match part {
+                ProgramPart::Decl(declaration) => pd = decl_to_impt_or_var(declaration, pd),
+                ProgramPart::Stmt(statement) => pd = stmt_to_call(statement, pd),
                 _ => (),
             }
         }
@@ -26,51 +18,60 @@ pub fn parse_js<'a>(js: &'a str) -> Result<Vec<&'a str>, ressa::Error> {
     Ok(pd)
 }
 
-fn match_declaration<'a>(declaration: Decl<'a>, mut pd: Vec<&'a str>) -> Vec<&'a str> {
+fn decl_to_impt_or_var<'a>(declaration: Decl<'a>, mut pd: Vec<&'a str>) -> Vec<&'a str> {
     match declaration {
-        Decl::Import(import) => pd = match_import(import, pd),
-        Decl::Variable(_, variable_vec) => pd = match_variable(variable_vec, pd),
+        Decl::Import(import) => pd = impt_to_str(import, pd),
+        Decl::Variable(_, variable_vec) => pd = var_init_to_call(variable_vec, pd),
         _ => (),
     }
     pd
 }
 
-fn match_import<'a>(import: Box<decl::ModImport<'a>>, mut pd: Vec<&'a str>) -> Vec<&'a str> {
-    let source = import.source;
-    if let expr::Literal::String(string_arg) = source {
-        let quotes: &[_] = &['\'', '\"'];
-        pd.push(string_arg.trim_matches(quotes));
+fn stmt_to_call<'a>(statement: Stmt<'a>, mut pd: Vec<&'a str>) -> Vec<&'a str> {
+    if let Stmt::Expr(expression) = statement {
+        if let Expr::Call(call) = expression {
+            pd = call_to_str(call, pd)
+        }
     }
     pd
 }
 
-fn match_variable<'a>(
+fn var_init_to_call<'a>(
     variable_vec: Vec<decl::VariableDecl<'a>>,
     mut pd: Vec<&'a str>,
 ) -> Vec<&'a str> {
     for v in variable_vec {
         if let Some(variable_init) = v.init {
-            match variable_init {
-                Expr::Call(call) => pd = match_expr(call, pd),
-                _ => (),
+            if let Expr::Call(call) = variable_init {
+                pd = call_to_str(call, pd);
             }
         }
     }
     pd
 }
 
-fn match_expr<'a>(expression: expr::CallExpr<'a>, mut pd: Vec<&'a str>,) -> Vec<&'a str> {
+fn trim_quotes<'a>(string: &'a str) -> &'a str {
+    string.trim_matches(|c| c == '\'' || c == '\"')
+}
+
+fn call_to_str<'a>(expression: expr::CallExpr<'a>, mut pd: Vec<&'a str>) -> Vec<&'a str> {
     if let Expr::Ident(callee) = &*expression.callee {
         if callee == &"require" {
             if let Some(argument) = expression.arguments.get(0) {
                 if let expr::Expr::Literal(literal) = argument {
-                    if let expr::Literal::String(string_arg) = literal {
-                        let quotes: &[_] = &['\'', '\"'];
-                        pd.push(string_arg.trim_matches(quotes));
+                    if let expr::Literal::String(string) = literal {
+                        pd.push(trim_quotes(string));
                     }
                 }
             }
         }
+    }
+    pd
+}
+
+fn impt_to_str<'a>(import: Box<decl::ModImport<'a>>, mut pd: Vec<&'a str>) -> Vec<&'a str> {
+    if let expr::Literal::String(string) = import.source {
+        pd.push(trim_quotes(string));
     }
     pd
 }
