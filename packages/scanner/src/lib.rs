@@ -3,6 +3,7 @@ use resast::ref_tree::{decl, expr, ProgramPart};
 use ressa::Parser;
 use std::vec::Vec;
 
+#[doc = "Parses a `&a' str` containing the contents of a JavaScript file and returns a `Result<Vec<&a' str>>` containing a list of packages/files that are statically imported/required in root level scope of the file."]
 pub fn parse_js<'a>(js: &'a str) -> Result<Vec<&'a str>, ressa::Error> {
     let p = Parser::new(js)?;
     let mut pd = Vec::<&str>::new();
