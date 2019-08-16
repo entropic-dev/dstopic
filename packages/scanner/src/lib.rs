@@ -51,7 +51,7 @@ fn var_init_to_call<'a>(
     pd
 }
 
-fn trim_quotes<'a>(string: &'a str) -> &'a str {
+fn trim_quotes(string: &str) -> &str {
     string.trim_matches(|c| c == '\'' || c == '\"')
 }
 
