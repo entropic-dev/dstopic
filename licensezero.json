@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "licensezero": [
+    {
+      "agentSignature": "c654d9fa7dd237e82d133d9ba332ad6a6c3bc6c2db1e3a7027dc5fa1f836dfbcf02489049f5dfb0ad49265552fdfd2a9a42b23b8c45eac0f39d56785b36baf03",
+      "license": {
+        "homepage": "https://github.com/entropic-dev/dstopic",
+        "jurisdiction": "US-CA",
+        "name": "Kat Marchán",
+        "projectID": "92aa5c7b-53e0-4638-9b89-7f28b80f4ea9",
+        "publicKey": "5f60082194dc6b4a3971fa7397be663c81313bcaa489af96cfdef1c413b1b01a",
+        "terms": "parity",
+        "version": "6.0.0"
+      },
+      "licensorSignature": "41c0a7506637dcf36a63b9e6d47990272a4fe8c7852a971998a35fb23e2dc1a44cac97b9ca81e292841cf782c91b7ddebd3f9cf8950627302dcdbfbb167f4e0c"
+    }
+  ]
+}
